@@ -11,17 +11,37 @@ import java.util.concurrent.ThreadLocalRandom;
 import static java.util.Objects.nonNull;
 
 public class Cell {
+    private final Island island;
     private final int x;
     private final int y;
     public Set<Plant> plants = new CopyOnWriteArraySet<>();
     public Set<Animal> animals = new CopyOnWriteArraySet<>();
 
-    public Cell(int x, int y) {
+    public Cell(Island island, int x, int y) {
+        this.island = island;
         this.x = x;
         this.y = y;
     }
 
-    public class LifeCycle implements Callable<Map<Cell, Set<Animal>>> {
+    private void resetReproduction() {
+        animals.forEach(a -> a.setReproduced(false));
+    }
+
+    private Cell getNextCell(Direction direction) {
+        if (direction == Direction.LEFT && x > 0) {
+            return island.cells[y][x - 1];
+        } else if (direction == Direction.RIGHT && x < island.width - 1) {
+            return island.cells[y][x + 1];
+        } else if (direction == Direction.UP && y > 0) {
+            return island.cells[y - 1][x];
+        } else if (direction == Direction.DOWN && y < island.height - 1) {
+            return island.cells[y + 1][x];
+        } else {
+            return null;
+        }
+    }
+
+    public class AnimalLifeCycle implements Callable<Map<Cell, Set<Animal>>> {
 
         @Override
         public Map<Cell, Set<Animal>> call() {
@@ -37,9 +57,10 @@ public class Cell {
                     newLivestock.add(reproduced);
                 }
 
-                Cell destinationCell = animal.getDestinationCell(x, y);
-                if (nonNull(destinationCell)) {
-                    forResettlement.computeIfAbsent(destinationCell, (v) -> new HashSet<>()).add(animal);
+                Direction direction = animal.getDirection(x, y);
+                Cell nextCell = getNextCell(direction);
+                if (nonNull(nextCell)) {
+                    forResettlement.computeIfAbsent(nextCell, (v) -> new HashSet<>()).add(animal);
                     animals.remove(animal);
                 }
             }
@@ -48,20 +69,16 @@ public class Cell {
             return forResettlement;
         }
 
-        private void resetReproduction() {
-            animals.forEach(a -> a.setReproduced(false));
-        }
-
         private void feed(Animal animal) {
             if (!plants.isEmpty()) {
                 plants.remove(plants.iterator().next());
                 animal.decreaseHunger();
-                Island.plantsEaten++;
+                island.plantsEaten++;
             } else {
                 animal.increaseHunger();
                 if (animal.isDead()) {
                     animals.remove(animal);
-                    Island.animalsDied++;
+                    island.animalsDied++;
                 }
             }
         }
@@ -82,7 +99,7 @@ public class Cell {
                     continue;
                 }
                 otherAnimal.setReproduced(true);
-                return new Animal();
+                return new Animal(island);
             }
 
             return null;

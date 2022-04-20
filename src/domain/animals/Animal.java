@@ -1,6 +1,7 @@
 package domain.animals;
 
 import domain.terrain.Cell;
+import domain.terrain.Direction;
 import domain.terrain.Island;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,8 +12,8 @@ public class Animal {
     private int hungerLevel = 9;
     private boolean reproduced;
 
-    public Animal() {
-        Island.animalsBorn++;
+    public Animal(Island island) {
+        island.animalsBorn++;
     }
 
     public boolean isDead() {
@@ -44,37 +45,22 @@ public class Animal {
         hungerLevel--;
     }
 
-    public Cell getDestinationCell(int currentX, int currentY) {
+    public Direction getDirection(int currentX, int currentY) {
         if (dead) {
-            return null;
+            return Direction.NONE;
         }
 
         int random = ThreadLocalRandom.current().nextInt(100);
-        Cell destinationCell;
         if (random < 20) {
-            if (currentX <= 0) {
-                return null;
-            }
-            destinationCell = Island.island.cells[currentY][currentX - 1];
+            return Direction.LEFT;
         } else if (random < 40) {
-            if (currentX >= Island.island.width - 1) {
-                return null;
-            }
-            destinationCell = Island.island.cells[currentY][currentX + 1];
+            return Direction.RIGHT;
         } else if (random < 60) {
-            if (currentY <= 0) {
-                return null;
-            }
-            destinationCell = Island.island.cells[currentY - 1][currentX];
+            return Direction.UP;
         } else if (random < 80) {
-            if (currentY >= Island.island.height - 1) {
-                return null;
-            }
-            destinationCell = Island.island.cells[currentY + 1][currentX];
+            return Direction.DOWN;
         } else {
-            return null;
+            return Direction.NONE;
         }
-
-        return destinationCell;
     }
 }
