@@ -54,10 +54,8 @@ public class Cell {
 
             for (Animal animal : animals) {
                 animal.feed(Cell.this);
-                Animal reproduced = animal.reproduce(Cell.this);
-                if (nonNull(reproduced)) {
-                    newLivestock.add(reproduced);
-                }
+                Set<Animal> reproduced = animal.reproduce(Cell.this);
+                newLivestock.addAll(reproduced);
 
                 Direction direction = animal.getDirection();
                 Cell nextCell = getNextCell(direction);

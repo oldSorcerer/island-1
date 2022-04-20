@@ -1,9 +1,10 @@
 package domain.terrain;
 
 import domain.animals.Animal;
-import domain.animals.Deer;
-import domain.animals.Predator;
-import domain.animals.Wolf;
+import domain.animals.herbivores.Deer;
+import domain.animals.herbivores.Rabbit;
+import domain.animals.predators.Predator;
+import domain.animals.predators.Wolf;
 import domain.plants.Plant;
 
 import java.util.HashSet;
@@ -46,11 +47,16 @@ public class Island {
     }
 
     private void populateAnimals() {
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 100; i++) {
             cells[0][0].animals.add(new Deer());
-            cells[0][width - 1].animals.add(new Deer());
+            cells[0][width - 1].animals.add(new Rabbit());
+        }
+
+        for (int i = 0; i < 50; i++) {
             cells[height - 1][0].animals.add(new Deer());
             cells[height - 1][width - 1].animals.add(new Deer());
+            cells[height - 1][0].animals.add(new Rabbit());
+            cells[height - 1][width - 1].animals.add(new Rabbit());
         }
 
         for (int i = 0; i < 10; i++) {
@@ -69,7 +75,8 @@ public class Island {
 
     public void runAnimalLifeCycle() throws InterruptedException {
         for (int i = 0; i < 1000; i++) {
-            System.out.printf("Step: %d\t\t Deer(born/died): %d/%d\t\t Wolves(born/died): %d/%d\t\t Plants(grown/eaten): %d/%d\n", i,
+            System.out.printf("Step: %d\t\t Rabbit(born/died): %d/%d\t\t Deer(born/died): %d/%d\t\t Wolves(born/died): %d/%d\t\t Plants(grown/eaten): %d/%d\n", i,
+                    Rabbit.rabbitsBorn, Rabbit.rabbitsDied,
                     Deer.deerBorn, Deer.deerDied,
                     Wolf.wolvesBorn, Wolf.wolvesDied,
                     plantsGrown, plantsEaten);

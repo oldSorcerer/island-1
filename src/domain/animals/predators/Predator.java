@@ -1,5 +1,7 @@
-package domain.animals;
+package domain.animals.predators;
 
+import domain.animals.Animal;
+import domain.animals.herbivores.Herbivore;
 import domain.terrain.Cell;
 
 import java.util.Optional;
@@ -19,6 +21,6 @@ public abstract class Predator extends Animal {
     void eat(Cell cell, Animal prey) {
         cell.animals.remove(prey);
         prey.die();
-        decreaseHunger();
+        decreaseHunger(prey.getWeight());
     }
 }

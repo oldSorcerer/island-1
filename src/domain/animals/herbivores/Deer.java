@@ -1,4 +1,9 @@
-package domain.animals;
+package domain.animals.herbivores;
+
+import domain.animals.Animal;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Deer extends Herbivore {
 
@@ -7,11 +12,14 @@ public class Deer extends Herbivore {
 
     public Deer() {
         deerBorn++;
+        this.weight = 3;
     }
 
     @Override
-    Deer getChild() {
-        return new Deer();
+    protected Set<Animal> getChild() {
+        return new HashSet<>() {{
+            add(new Deer());
+        }};
     }
 
     @Override

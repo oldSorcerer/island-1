@@ -1,6 +1,10 @@
-package domain.animals;
+package domain.animals.predators;
 
+import domain.animals.Animal;
 import domain.terrain.Cell;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Wolf extends Predator {
 
@@ -13,8 +17,10 @@ public class Wolf extends Predator {
     }
 
     @Override
-    Wolf getChild() {
-        return new Wolf();
+    protected Set<Animal> getChild() {
+        return new HashSet<>() {{
+            add(new Wolf());
+        }};
     }
 
     @Override

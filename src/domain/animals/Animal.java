@@ -3,18 +3,21 @@ package domain.animals;
 import domain.terrain.Cell;
 import domain.terrain.Direction;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal {
 
     private boolean dead;
-    int bornHungerLevel = 9;
-    int maxHungerLevel = 10;
-    int reproduceHungerLevel = 5;
+    private int hungerLevel = 9;
+    protected int maxHungerLevel = 10;
+    private int reproduceHungerLevel = 5;
     private boolean reproduced;
+    protected int weight;
 
-    public boolean isDead() {
-        return dead;
+    public int getWeight() {
+        return weight;
     }
 
     public void die() {
@@ -25,29 +28,26 @@ public abstract class Animal {
         this.reproduced = reproduced;
     }
 
-    public boolean isReadyToReproduce() {
-        return !reproduced && bornHungerLevel < reproduceHungerLevel;
+    private boolean isReadyToReproduce() {
+        return !reproduced && hungerLevel < reproduceHungerLevel;
     }
 
-    public void increaseHunger(Cell cell) {
+    protected void increaseHunger(Cell cell) {
         if (dead) {
             return;
         }
-        bornHungerLevel++;
-        if (bornHungerLevel >= maxHungerLevel) {
+        hungerLevel++;
+        if (hungerLevel >= maxHungerLevel) {
             die();
-        }
-
-        if (isDead()) {
             cell.animals.remove(this);
         }
     }
 
-    public void decreaseHunger() {
-        if (dead || bornHungerLevel <= 0) {
+    protected void decreaseHunger(int points) {
+        if (dead || hungerLevel <= 0) {
             return;
         }
-        bornHungerLevel--;
+        hungerLevel -= points;
     }
 
     public abstract void feed(Cell cell);
@@ -71,15 +71,15 @@ public abstract class Animal {
         }
     }
 
-    public Animal reproduce(Cell cell) {
+    public Set<Animal> reproduce(Cell cell) {
         if (!isReadyToReproduce()) {
-            return null;
+            return Collections.emptySet();
         }
         setReproduced(true);
 
         boolean b = ThreadLocalRandom.current().nextBoolean();
         if (b) {
-            return null;
+            return Collections.emptySet();
         }
 
         for (Animal otherAnimal : cell.animals) {
@@ -90,8 +90,8 @@ public abstract class Animal {
             return getChild();
         }
 
-        return null;
+        return Collections.emptySet();
     }
 
-    abstract Animal getChild();
+    protected abstract Set<Animal> getChild();
 }
