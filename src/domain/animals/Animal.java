@@ -2,22 +2,23 @@ package domain.animals;
 
 import domain.terrain.Cell;
 import domain.terrain.Direction;
-import domain.terrain.Island;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Animal {
+public abstract class Animal {
 
     private boolean dead;
-    private int hungerLevel = 9;
+    int bornHungerLevel = 9;
+    int maxHungerLevel = 10;
+    int reproduceHungerLevel = 5;
     private boolean reproduced;
-
-    public Animal(Island island) {
-        island.animalsBorn++;
-    }
 
     public boolean isDead() {
         return dead;
+    }
+
+    public void die() {
+        this.dead = true;
     }
 
     public void setReproduced(boolean reproduced) {
@@ -25,41 +26,33 @@ public class Animal {
     }
 
     public boolean isReadyToReproduce() {
-        return !reproduced && hungerLevel < 5;
+        return !reproduced && bornHungerLevel < reproduceHungerLevel;
     }
 
-    public void increaseHunger() {
-        if (dead || hungerLevel >= 10) {
+    public void increaseHunger(Cell cell) {
+        if (dead) {
             return;
         }
-        hungerLevel++;
-        if (hungerLevel == 10) {
-            dead = true;
+        bornHungerLevel++;
+        if (bornHungerLevel >= maxHungerLevel) {
+            die();
+        }
+
+        if (isDead()) {
+            cell.animals.remove(this);
         }
     }
 
     public void decreaseHunger() {
-        if (dead || hungerLevel <= 0) {
+        if (dead || bornHungerLevel <= 0) {
             return;
         }
-        hungerLevel--;
+        bornHungerLevel--;
     }
 
-    public void feed(Cell cell) {
-        if (!cell.plants.isEmpty()) {
-            cell.plants.remove(cell.plants.iterator().next());
-            decreaseHunger();
-            cell.island.plantsEaten++;
-        } else {
-            increaseHunger();
-            if (isDead()) {
-                cell.animals.remove(this);
-                cell.island.animalsDied++;
-            }
-        }
-    }
+    public abstract void feed(Cell cell);
 
-    public Direction getDirection(int currentX, int currentY) {
+    public Direction getDirection() {
         if (dead) {
             return Direction.NONE;
         }
@@ -90,13 +83,15 @@ public class Animal {
         }
 
         for (Animal otherAnimal : cell.animals) {
-            if (!otherAnimal.isReadyToReproduce()) {
+            if (!otherAnimal.isReadyToReproduce() || !this.getClass().equals(otherAnimal.getClass())) {
                 continue;
             }
             otherAnimal.setReproduced(true);
-            return new Animal(cell.island);
+            return getChild();
         }
 
         return null;
     }
+
+    abstract Animal getChild();
 }

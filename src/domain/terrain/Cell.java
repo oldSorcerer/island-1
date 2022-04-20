@@ -59,7 +59,7 @@ public class Cell {
                     newLivestock.add(reproduced);
                 }
 
-                Direction direction = animal.getDirection(x, y);
+                Direction direction = animal.getDirection();
                 Cell nextCell = getNextCell(direction);
                 if (nonNull(nextCell)) {
                     forResettlement.computeIfAbsent(nextCell, (v) -> new HashSet<>()).add(animal);

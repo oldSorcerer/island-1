@@ -1,6 +1,9 @@
 package domain.terrain;
 
 import domain.animals.Animal;
+import domain.animals.Deer;
+import domain.animals.Predator;
+import domain.animals.Wolf;
 import domain.plants.Plant;
 
 import java.util.HashSet;
@@ -11,12 +14,10 @@ import java.util.concurrent.*;
 public class Island {
     public int plantsGrown;
     public int plantsEaten;
-    public int animalsBorn;
-    public int animalsDied;
     public final int width = 100;
     public final int height = 20;
     private final int STEP_PERIOD = 500;
-    private final int maxCellPlants = 2000;
+    private final int maxCellPlants = 2_000;
     public final Cell[][] cells = new Cell[height][width];
 
     public Island() {
@@ -36,7 +37,7 @@ public class Island {
     private void growPlants() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int random = ThreadLocalRandom.current().nextInt(50, 1000);
+                int random = ThreadLocalRandom.current().nextInt(50, maxCellPlants / 2);
                 for (int i = 0; i < random; i++) {
                     cells[y][x].plants.add(new Plant(this));
                 }
@@ -45,11 +46,18 @@ public class Island {
     }
 
     private void populateAnimals() {
-        for (int i = 0; i < 100; i++) {
-            cells[0][0].animals.add(new Animal(this));
-            cells[0][width - 1].animals.add(new Animal(this));
-            cells[height - 1][0].animals.add(new Animal(this));
-            cells[height - 1][width - 1].animals.add(new Animal(this));
+        for (int i = 0; i < 200; i++) {
+            cells[0][0].animals.add(new Deer());
+            cells[0][width - 1].animals.add(new Deer());
+            cells[height - 1][0].animals.add(new Deer());
+            cells[height - 1][width - 1].animals.add(new Deer());
+        }
+
+        for (int i = 0; i < 10; i++) {
+            cells[0][0].animals.add(new Wolf());
+            cells[0][width - 1].animals.add(new Wolf());
+            cells[height - 1][0].animals.add(new Wolf());
+            cells[height - 1][width - 1].animals.add(new Wolf());
         }
     }
 
@@ -61,8 +69,10 @@ public class Island {
 
     public void runAnimalLifeCycle() throws InterruptedException {
         for (int i = 0; i < 1000; i++) {
-            System.out.printf("Step: %d\t\t animals(born/died): %d/%d\t\t plants(grown/eaten): %d/%d\n",
-                    i, animalsBorn, animalsDied, plantsGrown, plantsEaten);
+            System.out.printf("Step: %d\t\t Deer(born/died): %d/%d\t\t Wolves(born/died): %d/%d\t\t Plants(grown/eaten): %d/%d\n", i,
+                    Deer.deerBorn, Deer.deerDied,
+                    Wolf.wolvesBorn, Wolf.wolvesDied,
+                    plantsGrown, plantsEaten);
             printAnimals();
             nextLifeCycle();
             Thread.sleep(STEP_PERIOD);
@@ -74,8 +84,12 @@ public class Island {
             for (int x = 0; x < width; x++) {
                 Cell cell = cells[y][x];
                 System.out.print(cell.animals.isEmpty()
-                        ? cell.plants.isEmpty() ? "_" : "."
-                        : cell.animals.size() > 9 ? "*" : cell.animals.size());
+                        ? cell.plants.isEmpty()
+                        ? "_"
+                        : "."
+                        : cell.animals.size() > 9
+                        ? "*"
+                        : cell.animals.stream().allMatch(a -> a instanceof Predator) ? "@" : cell.animals.size());
             }
             System.out.println();
         }
@@ -83,18 +97,19 @@ public class Island {
 
     private void nextLifeCycle() {
         ExecutorService service = Executors.newCachedThreadPool();
-        Set<Future<Map<Cell, Set<Animal>>>> futures = new HashSet<>();
+        Set<Future<Map<Cell, Set<Animal>>>> resettlementGroups = new HashSet<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                futures.add(service.submit(cells[y][x].new AnimalLifeCycle()));
+                resettlementGroups.add(service.submit(cells[y][x].new AnimalLifeCycle()));
             }
         }
         service.shutdown();
+
         try {
             if (service.awaitTermination(10, TimeUnit.MINUTES)) {
-                for (Future<Map<Cell, Set<Animal>>> future : futures) {
-                    for (Map.Entry<Cell, Set<Animal>> entry : future.get().entrySet()) {
-                        entry.getKey().animals.addAll(entry.getValue());
+                for (Future<Map<Cell, Set<Animal>>> cellGroups : resettlementGroups) {
+                    for (Map.Entry<Cell, Set<Animal>> group : cellGroups.get().entrySet()) {
+                        group.getKey().animals.addAll(group.getValue());
                     }
                 }
             } else {
