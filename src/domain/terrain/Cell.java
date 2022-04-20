@@ -3,15 +3,17 @@ package domain.terrain;
 import domain.animals.Animal;
 import domain.plants.Plant;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.Objects.nonNull;
 
 public class Cell {
-    private final Island island;
+    public final Island island;
     private final int x;
     private final int y;
     public Set<Plant> plants = new CopyOnWriteArraySet<>();
@@ -51,8 +53,8 @@ public class Cell {
             Set<Animal> newLivestock = new HashSet<>();
 
             for (Animal animal : animals) {
-                feed(animal);
-                Animal reproduced = reproduce(animal);
+                animal.feed(Cell.this);
+                Animal reproduced = animal.reproduce(Cell.this);
                 if (nonNull(reproduced)) {
                     newLivestock.add(reproduced);
                 }
@@ -67,42 +69,6 @@ public class Cell {
 
             animals.addAll(newLivestock);
             return forResettlement;
-        }
-
-        private void feed(Animal animal) {
-            if (!plants.isEmpty()) {
-                plants.remove(plants.iterator().next());
-                animal.decreaseHunger();
-                island.plantsEaten++;
-            } else {
-                animal.increaseHunger();
-                if (animal.isDead()) {
-                    animals.remove(animal);
-                    island.animalsDied++;
-                }
-            }
-        }
-
-        private Animal reproduce(Animal animal) {
-            if (!animal.isReadyToReproduce()) {
-                return null;
-            }
-            animal.setReproduced(true);
-
-            boolean b = ThreadLocalRandom.current().nextBoolean();
-            if (b) {
-                return null;
-            }
-
-            for (Animal otherAnimal : animals) {
-                if (!otherAnimal.isReadyToReproduce()) {
-                    continue;
-                }
-                otherAnimal.setReproduced(true);
-                return new Animal(island);
-            }
-
-            return null;
         }
     }
 }

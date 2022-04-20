@@ -45,6 +45,20 @@ public class Animal {
         hungerLevel--;
     }
 
+    public void feed(Cell cell) {
+        if (!cell.plants.isEmpty()) {
+            cell.plants.remove(cell.plants.iterator().next());
+            decreaseHunger();
+            cell.island.plantsEaten++;
+        } else {
+            increaseHunger();
+            if (isDead()) {
+                cell.animals.remove(this);
+                cell.island.animalsDied++;
+            }
+        }
+    }
+
     public Direction getDirection(int currentX, int currentY) {
         if (dead) {
             return Direction.NONE;
@@ -62,5 +76,27 @@ public class Animal {
         } else {
             return Direction.NONE;
         }
+    }
+
+    public Animal reproduce(Cell cell) {
+        if (!isReadyToReproduce()) {
+            return null;
+        }
+        setReproduced(true);
+
+        boolean b = ThreadLocalRandom.current().nextBoolean();
+        if (b) {
+            return null;
+        }
+
+        for (Animal otherAnimal : cell.animals) {
+            if (!otherAnimal.isReadyToReproduce()) {
+                continue;
+            }
+            otherAnimal.setReproduced(true);
+            return new Animal(cell.island);
+        }
+
+        return null;
     }
 }
