@@ -43,7 +43,7 @@ public class Cell {
         }
     }
 
-    public class AnimalLifeCycle implements Callable<Map<Cell, Set<Animal>>> {
+    public class CellLifeCycle implements Callable<Map<Cell, Set<Animal>>> {
 
         @Override
         public Map<Cell, Set<Animal>> call() {

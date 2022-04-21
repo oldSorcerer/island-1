@@ -10,9 +10,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Animal {
 
     private boolean dead;
-    private int hungerLevel = 9;
     protected int maxHungerLevel = 10;
-    private int reproduceHungerLevel = 5;
+    protected int hungerLevel = maxHungerLevel / 2;
     private boolean reproduced;
     protected int weight;
 
@@ -29,7 +28,7 @@ public abstract class Animal {
     }
 
     private boolean isReadyToReproduce() {
-        return !reproduced && hungerLevel < reproduceHungerLevel;
+        return !reproduced && hungerLevel < maxHungerLevel / 4;
     }
 
     protected void increaseHunger(Cell cell) {
@@ -47,7 +46,7 @@ public abstract class Animal {
         if (dead || hungerLevel <= 0) {
             return;
         }
-        hungerLevel -= points;
+        hungerLevel = hungerLevel > points ? hungerLevel - points : 0;
     }
 
     public abstract void feed(Cell cell);
@@ -58,13 +57,13 @@ public abstract class Animal {
         }
 
         int random = ThreadLocalRandom.current().nextInt(100);
-        if (random < 20) {
+        if (random < 10) {
             return Direction.LEFT;
-        } else if (random < 40) {
+        } else if (random < 20) {
             return Direction.RIGHT;
-        } else if (random < 60) {
+        } else if (random < 30) {
             return Direction.UP;
-        } else if (random < 80) {
+        } else if (random < 40) {
             return Direction.DOWN;
         } else {
             return Direction.NONE;
@@ -77,8 +76,8 @@ public abstract class Animal {
         }
         setReproduced(true);
 
-        boolean b = ThreadLocalRandom.current().nextBoolean();
-        if (b) {
+        int random = ThreadLocalRandom.current().nextInt(100);
+        if (random < 100 - getWeight()) {
             return Collections.emptySet();
         }
 

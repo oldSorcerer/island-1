@@ -12,7 +12,9 @@ public class Deer extends Herbivore {
 
     public Deer() {
         deerBorn++;
-        this.weight = 3;
+        this.weight = 50;
+        this.maxHungerLevel = 40;
+        hungerLevel = maxHungerLevel / 2;
     }
 
     @Override

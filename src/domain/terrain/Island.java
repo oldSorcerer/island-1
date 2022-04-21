@@ -18,7 +18,7 @@ public class Island {
     public final int width = 100;
     public final int height = 20;
     private final int STEP_PERIOD = 500;
-    private final int maxCellPlants = 2_000;
+    private final int maxCellPlants = 100;
     public final Cell[][] cells = new Cell[height][width];
 
     public Island() {
@@ -38,7 +38,7 @@ public class Island {
     private void growPlants() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int random = ThreadLocalRandom.current().nextInt(50, maxCellPlants / 2);
+                int random = ThreadLocalRandom.current().nextInt(maxCellPlants / 10, maxCellPlants / 2);
                 for (int i = 0; i < random; i++) {
                     cells[y][x].plants.add(new Plant(this));
                 }
@@ -47,43 +47,31 @@ public class Island {
     }
 
     private void populateAnimals() {
-        for (int i = 0; i < 100; i++) {
-            cells[0][0].animals.add(new Deer());
-            cells[0][width - 1].animals.add(new Rabbit());
-        }
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int deerRrandom = ThreadLocalRandom.current().nextInt(100);
+                if (deerRrandom < 10) {
+                    cells[y][x].animals.add(new Deer());
+                    cells[y][x].animals.add(new Deer());
+                    cells[y][x].animals.add(new Deer());
+                    cells[y][x].animals.add(new Deer());
+                }
 
-        for (int i = 0; i < 50; i++) {
-            cells[height - 1][0].animals.add(new Deer());
-            cells[height - 1][width - 1].animals.add(new Deer());
-            cells[height - 1][0].animals.add(new Rabbit());
-            cells[height - 1][width - 1].animals.add(new Rabbit());
-        }
-
-        for (int i = 0; i < 10; i++) {
-            cells[0][0].animals.add(new Wolf());
-            cells[0][width - 1].animals.add(new Wolf());
-            cells[height - 1][0].animals.add(new Wolf());
-            cells[height - 1][width - 1].animals.add(new Wolf());
+                int wolfRrandom = ThreadLocalRandom.current().nextInt(100);
+                if (wolfRrandom < 10) {
+                    cells[y][x].animals.add(new Wolf());
+                    cells[y][x].animals.add(new Wolf());
+                    cells[y][x].animals.add(new Wolf());
+                    cells[y][x].animals.add(new Wolf());
+                }
+            }
         }
     }
 
-    public ExecutorService runPlantsGrowth() {
-        ScheduledExecutorService plantGrowth = Executors.newScheduledThreadPool(width * height);
-        plantGrowth.scheduleAtFixedRate(new PlantGrowth(), STEP_PERIOD, STEP_PERIOD * 5, TimeUnit.MILLISECONDS);
-        return plantGrowth;
-    }
-
-    public void runAnimalLifeCycle() throws InterruptedException {
-        for (int i = 0; i < 1000; i++) {
-            System.out.printf("Step: %d\t\t Rabbit(born/died): %d/%d\t\t Deer(born/died): %d/%d\t\t Wolves(born/died): %d/%d\t\t Plants(grown/eaten): %d/%d\n", i,
-                    Rabbit.rabbitsBorn, Rabbit.rabbitsDied,
-                    Deer.deerBorn, Deer.deerDied,
-                    Wolf.wolvesBorn, Wolf.wolvesDied,
-                    plantsGrown, plantsEaten);
-            printAnimals();
-            nextLifeCycle();
-            Thread.sleep(STEP_PERIOD);
-        }
+    public void run() {
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+        executorService.scheduleAtFixedRate(new PlantGrowth(), STEP_PERIOD, STEP_PERIOD * 5, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(new IslandLifeCycle(), 0, STEP_PERIOD, TimeUnit.MILLISECONDS);
     }
 
     private void printAnimals() {
@@ -92,11 +80,9 @@ public class Island {
                 Cell cell = cells[y][x];
                 System.out.print(cell.animals.isEmpty()
                         ? cell.plants.isEmpty()
-                        ? "_"
-                        : "."
-                        : cell.animals.size() > 9
-                        ? "*"
-                        : cell.animals.stream().allMatch(a -> a instanceof Predator) ? "@" : cell.animals.size());
+                        ? "➖" // empty
+                        : cell.plants.size() < 10 ? "\uD83C\uDF31" : "\uD83C\uDF3F" // only plants
+                        : cell.animals.stream().allMatch(a -> a instanceof Predator) ? "\uD83D\uDC3A" : "\uD83E\uDD8C");
             }
             System.out.println();
         }
@@ -107,7 +93,7 @@ public class Island {
         Set<Future<Map<Cell, Set<Animal>>>> resettlementGroups = new HashSet<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                resettlementGroups.add(service.submit(cells[y][x].new AnimalLifeCycle()));
+                resettlementGroups.add(service.submit(cells[y][x].new CellLifeCycle()));
             }
         }
         service.shutdown();
@@ -136,7 +122,7 @@ public class Island {
                         if (ThreadLocalRandom.current().nextBoolean()) {
                             continue;
                         }
-                        int factor = maxCellPlants / 2 - Math.abs(cells[y][x].plants.size() - maxCellPlants / 2);
+                        int factor = maxCellPlants / 2 - Math.abs(cells[y][x].plants.size() - maxCellPlants / 2) + 2;
                         int numberOfNewPlants = factor != 0 ? ThreadLocalRandom.current().nextInt(factor) : 1;
 
                         for (int i = 0; i < numberOfNewPlants; i++) {
@@ -147,6 +133,23 @@ public class Island {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    class IslandLifeCycle implements Runnable {
+
+        private int step;
+
+        @Override
+        public void run() {
+            System.out.printf("Step: %d\t\t Rabbit(born/died): %d/%d\t\t Deer(born/died): %d/%d\t\t Wolves(born/died): %d/%d\t\t Plants(grown/eaten): %d/%d\n", step,
+                    Rabbit.rabbitsBorn, Rabbit.rabbitsDied,
+                    Deer.deerBorn, Deer.deerDied,
+                    Wolf.wolvesBorn, Wolf.wolvesDied,
+                    plantsGrown, plantsEaten);
+            printAnimals();
+            nextLifeCycle();
+            step++;
         }
     }
 }

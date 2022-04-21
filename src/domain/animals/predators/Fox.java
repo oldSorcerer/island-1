@@ -5,27 +5,25 @@ import domain.animals.Animal;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Wolf extends Predator {
+public class Fox extends Predator {
+    public static int foxesBorn;
+    public static int foxesDied;
 
-    public static int wolvesBorn;
-    public static int wolvesDied;
-
-    public Wolf() {
-        wolvesBorn++;
-        this.maxHungerLevel = 20;
-        hungerLevel = maxHungerLevel / 2;
+    public Fox() {
+        foxesBorn++;
+        this.maxHungerLevel = 15;
     }
 
     @Override
     protected Set<Animal> getChild() {
         return new HashSet<>() {{
-            add(new Wolf());
+            add(new Fox());
         }};
     }
 
     @Override
     public void die() {
         super.die();
-        wolvesDied++;
+        foxesDied++;
     }
 }
