@@ -6,7 +6,7 @@ public class Plant {
     public static int plantsGrown;
     public static int plantsEaten;
 
-    public Plant(Island island) {
+    public Plant() {
         plantsGrown++;
     }
 }

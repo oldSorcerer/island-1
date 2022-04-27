@@ -17,7 +17,8 @@ public class Island {
     public int plantsEaten;
     public final int width = 100;
     public final int height = 20;
-    private final int STEP_PERIOD = 500;
+    private final int ANIMAL_STEP_PERIOD = 500;
+    private final int PLANT_STEP_PERIOD = ANIMAL_STEP_PERIOD * 5;
     private final int maxCellPlants = 100;
     public final Cell[][] cells = new Cell[height][width];
 
@@ -40,7 +41,7 @@ public class Island {
             for (int x = 0; x < width; x++) {
                 int random = ThreadLocalRandom.current().nextInt(maxCellPlants / 10, maxCellPlants / 2);
                 for (int i = 0; i < random; i++) {
-                    cells[y][x].plants.add(new Plant(this));
+                    cells[y][x].plants.add(new Plant());
                 }
             }
         }
@@ -70,11 +71,11 @@ public class Island {
 
     public void run() {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
-        executorService.scheduleAtFixedRate(new PlantGrowth(), STEP_PERIOD, STEP_PERIOD * 5, TimeUnit.MILLISECONDS);
-        executorService.scheduleAtFixedRate(new IslandLifeCycle(), 0, STEP_PERIOD, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(new PlantGrowth(), PLANT_STEP_PERIOD, PLANT_STEP_PERIOD, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(new AnimalsLifeCycle(), 0, ANIMAL_STEP_PERIOD, TimeUnit.MILLISECONDS);
     }
 
-    private void printAnimals() {
+    private void printIsland() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Cell cell = cells[y][x];
@@ -126,7 +127,7 @@ public class Island {
                         int numberOfNewPlants = factor != 0 ? ThreadLocalRandom.current().nextInt(factor) : 1;
 
                         for (int i = 0; i < numberOfNewPlants; i++) {
-                            cells[y][x].plants.add(new Plant(Island.this));
+                            cells[y][x].plants.add(new Plant());
                         }
                     }
                 }
@@ -136,7 +137,7 @@ public class Island {
         }
     }
 
-    class IslandLifeCycle implements Runnable {
+    class AnimalsLifeCycle implements Runnable {
 
         private int step;
 
@@ -147,7 +148,7 @@ public class Island {
                     Deer.deerBorn, Deer.deerDied,
                     Wolf.wolvesBorn, Wolf.wolvesDied,
                     plantsGrown, plantsEaten);
-            printAnimals();
+            printIsland();
             nextLifeCycle();
             step++;
         }

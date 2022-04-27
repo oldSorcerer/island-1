@@ -32,7 +32,7 @@ public class Island {
             for (int x = 0; x < width; x++) {
                 int random = ThreadLocalRandom.current().nextInt(maxCellPlants / 2);
                 for (int i = 0; i < random; i++) {
-                    cells[y][x].plants.add(new Plant(this));
+                    cells[y][x].plants.add(new Plant());
                 }
             }
         }
@@ -78,7 +78,7 @@ public class Island {
                         int numberOfNewPlants = factor != 0 ? ThreadLocalRandom.current().nextInt(factor) : 1;
 
                         for (int i = 0; i < numberOfNewPlants; i++) {
-                            cells[y][x].plants.add(new Plant(Island.this));
+                            cells[y][x].plants.add(new Plant());
                         }
                     }
                 }
