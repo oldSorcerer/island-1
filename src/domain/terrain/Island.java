@@ -52,8 +52,8 @@ public class Island {
                 if (deerRrandom < 10) {
                     cells[y][x].animals.add(new Deer());
                     cells[y][x].animals.add(new Deer());
-                    cells[y][x].animals.add(new Deer());
-                    cells[y][x].animals.add(new Deer());
+                    cells[y][x].animals.add(new Rabbit());
+                    cells[y][x].animals.add(new Rabbit());
                 }
 
                 int wolfRrandom = ThreadLocalRandom.current().nextInt(100);
@@ -81,7 +81,8 @@ public class Island {
                         ? cell.plants.isEmpty()
                         ? "➖" // empty
                         : cell.plants.size() < 10 ? "\uD83C\uDF31" : "\uD83C\uDF3F" // only plants
-                        : cell.animals.stream().allMatch(a -> a instanceof Predator) ? "\uD83D\uDC3A" : "\uD83E\uDD8C");
+                        : cell.animals.stream().allMatch(a -> a instanceof Predator) ? "\uD83D\uDC3A"
+                        : cell.animals.stream().anyMatch(a -> a instanceof Deer) ? "\uD83E\uDD8C" : "\uD83D\uDC07");
             }
             System.out.println();
         }
