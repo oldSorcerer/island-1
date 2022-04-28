@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.concurrent.*;
 
 public class Island {
-    public int plantsGrown;
-    public int plantsEaten;
     public final int width = 100;
     public final int height = 20;
     private final int ANIMAL_STEP_PERIOD = 500;
@@ -147,7 +145,7 @@ public class Island {
                     Rabbit.rabbitsBorn, Rabbit.rabbitsDied,
                     Deer.deerBorn, Deer.deerDied,
                     Wolf.wolvesBorn, Wolf.wolvesDied,
-                    plantsGrown, plantsEaten);
+                    Plant.plantsGrown, Plant.plantsEaten);
             printIsland();
             nextLifeCycle();
             step++;
