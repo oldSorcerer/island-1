@@ -5,28 +5,28 @@ import domain.animals.Animal;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Mouse extends Herbivore {
+import static domain.Params.*;
 
-    public static int miceBorn;
-    public static int miceDied;
+public class Rat extends Herbivore {
 
-    public Mouse() {
-        miceBorn++;
-        this.weight = 1;
+    public Rat() {
+        ratsBorn++;
+        this.weight = ratWeight;
+        init();
     }
 
     @Override
     protected Set<Animal> getChild() {
         return new HashSet<>() {{
-            for (int i = 0; i < 9; i++) {
-                add(new Mouse());
-            }
+//            for (int i = 0; i < 9; i++) {
+                add(new Rat());
+//            }
         }};
     }
 
     @Override
     public void die() {
         super.die();
-        miceDied++;
+        ratsDied++;
     }
 }

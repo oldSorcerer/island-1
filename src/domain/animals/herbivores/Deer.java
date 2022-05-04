@@ -5,16 +5,14 @@ import domain.animals.Animal;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Deer extends Herbivore {
+import static domain.Params.*;
 
-    public static int deerBorn;
-    public static int deerDied;
+public class Deer extends Herbivore {
 
     public Deer() {
         deerBorn++;
-        this.weight = 50;
-        this.maxHungerLevel = 40;
-        hungerLevel = maxHungerLevel / 2;
+        this.weight = deerWeight;
+        init();
     }
 
     @Override

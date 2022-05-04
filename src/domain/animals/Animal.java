@@ -10,10 +10,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Animal {
 
     private boolean dead;
-    protected int maxHungerLevel = 10;
-    protected int hungerLevel = maxHungerLevel / 2;
+    protected int maxSaturation;
+    protected int saturation;
     private boolean reproduced;
     protected int weight;
+
+    protected void init() {
+        maxSaturation = weight * 2;
+        saturation = weight;
+    }
 
     public int getWeight() {
         return weight;
@@ -28,28 +33,35 @@ public abstract class Animal {
     }
 
     private boolean isReadyToReproduce() {
-        return !reproduced && hungerLevel < maxHungerLevel / 4;
+        return !reproduced && saturation > maxSaturation / 2;
     }
 
-    protected void increaseHunger(Cell cell) {
+    protected void decreaseSaturation(Cell cell) {
         if (dead) {
             return;
         }
-        hungerLevel++;
-        if (hungerLevel >= maxHungerLevel) {
+        saturation--;
+        if (saturation <= 0) {
             die();
             cell.animals.remove(this);
         }
     }
 
-    protected void decreaseHunger(int points) {
-        if (dead || hungerLevel <= 0) {
+    protected void increaseSaturation(int points) {
+        if (dead || saturation <= 0) {
             return;
         }
-        hungerLevel = hungerLevel > points ? hungerLevel - points : 0;
+        saturation = Math.min(saturation + points, maxSaturation);
     }
 
-    public abstract void feed(Cell cell);
+    public void feed(Cell cell) {
+        pinchGrass(cell);
+        hunt(cell);
+    }
+
+    protected abstract void pinchGrass(Cell cell);
+
+    protected abstract void hunt(Cell cell);
 
     public Direction getDirection() {
         if (dead) {
@@ -77,7 +89,7 @@ public abstract class Animal {
         setReproduced(true);
 
         int random = ThreadLocalRandom.current().nextInt(100);
-        if (random < 100 - getWeight()) {
+        if (random < getWeight()) {
             return Collections.emptySet();
         }
 

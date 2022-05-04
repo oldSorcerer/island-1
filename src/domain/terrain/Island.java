@@ -1,9 +1,11 @@
 package domain.terrain;
 
+import domain.Params;
 import domain.animals.Animal;
 import domain.animals.herbivores.Deer;
 import domain.animals.herbivores.Rabbit;
-import domain.animals.predators.Predator;
+import domain.animals.herbivores.Rat;
+import domain.animals.predators.Fox;
 import domain.animals.predators.Wolf;
 import domain.plants.Plant;
 
@@ -11,13 +13,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class Island {
     public final int width = 100;
     public final int height = 20;
     private final int ANIMAL_STEP_PERIOD = 500;
     private final int PLANT_STEP_PERIOD = ANIMAL_STEP_PERIOD * 5;
-    private final int maxCellPlants = 100;
+    private final int maxCellPlants = 200;
     public final Cell[][] cells = new Cell[height][width];
 
     public Island() {
@@ -48,20 +51,34 @@ public class Island {
     private void populateAnimals() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int deerRrandom = ThreadLocalRandom.current().nextInt(100);
-                if (deerRrandom < 10) {
+                int random = ThreadLocalRandom.current().nextInt(100);
+                if (random < 10) {
                     cells[y][x].animals.add(new Deer());
                     cells[y][x].animals.add(new Deer());
+                }
+
+                random = ThreadLocalRandom.current().nextInt(100);
+                if (random < 1) {
+                    cells[y][x].animals.add(new Wolf());
+                    cells[y][x].animals.add(new Wolf());
+                }
+
+                random = ThreadLocalRandom.current().nextInt(100);
+                if (random < 2) {
+                    cells[y][x].animals.add(new Fox());
+                    cells[y][x].animals.add(new Fox());
+                }
+
+                random = ThreadLocalRandom.current().nextInt(100);
+                if (random < 20) {
                     cells[y][x].animals.add(new Rabbit());
                     cells[y][x].animals.add(new Rabbit());
                 }
 
-                int wolfRrandom = ThreadLocalRandom.current().nextInt(100);
-                if (wolfRrandom < 10) {
-                    cells[y][x].animals.add(new Wolf());
-                    cells[y][x].animals.add(new Wolf());
-                    cells[y][x].animals.add(new Wolf());
-                    cells[y][x].animals.add(new Wolf());
+                random = ThreadLocalRandom.current().nextInt(100);
+                if (random < 60) {
+                    cells[y][x].animals.add(new Rat());
+                    cells[y][x].animals.add(new Rat());
                 }
             }
         }
@@ -77,12 +94,30 @@ public class Island {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Cell cell = cells[y][x];
-                System.out.print(cell.animals.isEmpty()
-                        ? cell.plants.isEmpty()
-                        ? "➖" // empty
-                        : cell.plants.size() < 10 ? "\uD83C\uDF31" : "\uD83C\uDF3F" // only plants
-                        : cell.animals.stream().allMatch(a -> a instanceof Predator) ? "\uD83D\uDC3A"
-                        : cell.animals.stream().anyMatch(a -> a instanceof Deer) ? "\uD83E\uDD8C" : "\uD83D\uDC07");
+                if (cell.animals.isEmpty()) {
+                    if (cell.plants.isEmpty()) {
+                        System.out.print("➖");
+                    } else if (cell.plants.size() < 10) {
+                        System.out.print("\uD83C\uDF31");
+                    } else {
+                        System.out.print("\uD83C\uDF3F");
+                    }
+                } else {
+                    Set<Class> classes = cell.animals.stream()
+                            .map(Animal::getClass)
+                            .collect(Collectors.toSet());
+                    if (classes.contains(Deer.class)) {
+                        System.out.print("\uD83E\uDD8C");
+                    } else if (classes.contains(Wolf.class)) {
+                        System.out.print("\uD83D\uDC3A");
+                    } else if (classes.contains(Fox.class)) {
+                        System.out.print("\uD83E\uDD8A");
+                    } else if (classes.contains(Rabbit.class)) {
+                        System.out.print("\uD83D\uDC07");
+                    } else if (classes.contains(Rat.class)) {
+                        System.out.print("\uD83D\uDC00");
+                    }
+                }
             }
             System.out.println();
         }
@@ -142,10 +177,18 @@ public class Island {
 
         @Override
         public void run() {
-            System.out.printf("Step: %d\t\t Rabbit(born/died): %d/%d\t\t Deer(born/died): %d/%d\t\t Wolves(born/died): %d/%d\t\t Plants(grown/eaten): %d/%d\n", step,
-                    Rabbit.rabbitsBorn, Rabbit.rabbitsDied,
-                    Deer.deerBorn, Deer.deerDied,
-                    Wolf.wolvesBorn, Wolf.wolvesDied,
+            System.out.printf("Step: %d%n" +
+                            "Deer(born/died): %d/%d%n" +
+                            "Wolves(born/died): %d/%d%n" +
+                            "Foxes(born/died): %d/%d%n" +
+                            "Rabbits(born/died): %d/%d%n" +
+                            "Rats(born/died): %d/%d%n" +
+                            "Plants(grown/eaten): %d/%d\n", step,
+                    Params.deerBorn, Params.deerDied,
+                    Params.wolvesBorn, Params.wolvesDied,
+                    Params.foxesBorn, Params.foxesDied,
+                    Params.rabbitsBorn, Params.rabbitsDied,
+                    Params.ratsBorn, Params.ratsDied,
                     Plant.plantsGrown, Plant.plantsEaten);
             printIsland();
             nextLifeCycle();

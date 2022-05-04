@@ -5,13 +5,15 @@ import domain.animals.Animal;
 import java.util.HashSet;
 import java.util.Set;
 
+import static domain.Params.*;
+
 public class Fox extends Predator {
-    public static int foxesBorn;
-    public static int foxesDied;
 
     public Fox() {
         foxesBorn++;
-        this.maxHungerLevel = 15;
+        this.weight = foxWeight;
+        init();
+        this.diet = foxDiet;
     }
 
     @Override

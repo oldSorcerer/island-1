@@ -7,13 +7,17 @@ import domain.terrain.Cell;
 public abstract class Herbivore extends Animal {
 
     @Override
-    public void feed(Cell cell) {
+    public void pinchGrass(Cell cell) {
         if (!cell.plants.isEmpty()) {
             cell.plants.remove(cell.plants.iterator().next());
             Plant.plantsEaten++;
-            decreaseHunger(1);
+            increaseSaturation(1);
         } else {
-            increaseHunger(cell);
+            decreaseSaturation(cell);
         }
+    }
+
+    @Override
+    protected void hunt(Cell cell) {
     }
 }

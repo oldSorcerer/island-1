@@ -3,11 +3,9 @@ package domain.terrain;
 import domain.animals.Animal;
 import domain.plants.Plant;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import static java.util.Objects.nonNull;
@@ -16,8 +14,8 @@ public class Cell {
     public final Island island;
     private final int x;
     private final int y;
-    public Set<Plant> plants = new CopyOnWriteArraySet<>();
-    public Set<Animal> animals = new CopyOnWriteArraySet<>();
+    public List<Plant> plants = new CopyOnWriteArrayList<>();
+    public List<Animal> animals = new CopyOnWriteArrayList<>();
 
     public Cell(Island island, int x, int y) {
         this.island = island;
