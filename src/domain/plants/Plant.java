@@ -6,7 +6,7 @@ public class Plant {
     public static int plantsGrown;
     public static int plantsEaten;
 
-    public int weight = plantWeight;
+    public double weight = plantWeight;
 
     public Plant() {
         plantsGrown++;

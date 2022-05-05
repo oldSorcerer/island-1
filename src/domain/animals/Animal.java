@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 public abstract class Animal {
 
     private boolean dead;
-    protected int maxSaturation;
+    protected double maxSaturation;
     protected double saturation;
     private boolean reproduced;
-    protected int weight;
+    protected double weight;
     protected int maxInCell;
 
     protected void init() {
@@ -22,7 +22,7 @@ public abstract class Animal {
         saturation = weight;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -50,7 +50,7 @@ public abstract class Animal {
         }
     }
 
-    protected void increaseSaturation(int points) {
+    protected void increaseSaturation(double points) {
         if (dead || saturation <= 0) {
             return;
         }
@@ -104,11 +104,11 @@ public abstract class Animal {
                 continue;
             }
             otherAnimal.setReproduced(true);
-            return getChild();
+            return getOffspring();
         }
 
         return Collections.emptySet();
     }
 
-    protected abstract Set<Animal> getChild();
+    protected abstract Set<Animal> getOffspring();
 }

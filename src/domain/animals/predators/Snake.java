@@ -1,4 +1,4 @@
-package domain.animals.herbivores;
+package domain.animals.predators;
 
 import domain.animals.Animal;
 
@@ -7,25 +7,26 @@ import java.util.Set;
 
 import static domain.Params.*;
 
-public class Rabbit extends Herbivore {
+public class Snake extends Predator {
 
-    public Rabbit() {
-        rabbitsBorn++;
-        this.weight = rabbitWeight;
-        this.maxInCell = rabbitsInCell;
+    public Snake() {
+        snakesBorn++;
+        this.weight = snakeWeight;
+        this.maxInCell = snakesInCell;
         init();
+        this.diet = snakeDiet;
     }
 
     @Override
     protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
-            add(new Rabbit());
+            add(new Snake());
         }};
     }
 
     @Override
     public void die() {
         super.die();
-        rabbitsDied++;
+        snakesDied++;
     }
 }

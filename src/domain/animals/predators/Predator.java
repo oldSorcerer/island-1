@@ -22,16 +22,20 @@ public abstract class Predator extends Animal {
             return;
         }
 
-        Optional<Animal> prey = findPray(cell);
-        if (prey.isPresent()) {
-            Animal snack = prey.get();
-            cell.animals.remove(snack);
-            snack.die();
-            increaseSaturation(snack.getWeight());
-            feed(cell);
-        } else {
-            decreaseSaturation(cell);
-        }
+        do {
+            Optional<Animal> prey = findPray(cell);
+            if (prey.isPresent()) {
+                Animal snack = prey.get();
+                cell.animals.remove(snack);
+                snack.die();
+                increaseSaturation(snack.getWeight());
+                feed(cell);
+            } else {
+                break;
+            }
+        } while (saturation < maxSaturation / 2);
+
+        decreaseSaturation(cell);
     }
 
     protected Optional<Animal> findPray(Cell cell) {

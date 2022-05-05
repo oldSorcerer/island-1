@@ -6,6 +6,7 @@ import domain.plants.Plant;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.Objects.nonNull;
 
@@ -21,10 +22,6 @@ public class Cell {
         this.x = x;
         this.y = y;
     }
-
-//    private void resetReproduction() {
-//        animals.forEach(a -> a.setReproduced(false));
-//    }
 
     private Cell getNextCell(Direction direction) {
         if (direction == Direction.LEFT && x > 0) {
@@ -44,11 +41,10 @@ public class Cell {
 
         @Override
         public Map<Cell, Set<Animal>> call() {
-//            resetReproduction();
-
             Map<Cell, Set<Animal>> forResettlement = new HashMap<>();
             Set<Animal> newLivestock = new HashSet<>();
 
+            Collections.shuffle(animals, ThreadLocalRandom.current());
             for (Animal animal : animals) {
                 animal.feed(Cell.this);
                 Set<Animal> reproduced = animal.reproduce(Cell.this);

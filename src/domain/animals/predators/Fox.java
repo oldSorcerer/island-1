@@ -18,7 +18,7 @@ public class Fox extends Predator {
     }
 
     @Override
-    protected Set<Animal> getChild() {
+    protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
             add(new Fox());
         }};

@@ -17,7 +17,7 @@ public class Deer extends Herbivore {
     }
 
     @Override
-    protected Set<Animal> getChild() {
+    protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
             add(new Deer());
         }};

@@ -7,25 +7,25 @@ import java.util.Set;
 
 import static domain.Params.*;
 
-public class Rabbit extends Herbivore {
+public class Caterpillar extends Herbivore {
 
-    public Rabbit() {
-        rabbitsBorn++;
-        this.weight = rabbitWeight;
-        this.maxInCell = rabbitsInCell;
+    public Caterpillar() {
+        caterpillarsBorn++;
+        this.weight = caterpillarWeight;
+        this.maxInCell = caterpillarsInCell;
         init();
     }
 
     @Override
     protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
-            add(new Rabbit());
+            add(new Caterpillar());
         }};
     }
 
     @Override
     public void die() {
         super.die();
-        rabbitsDied++;
+        caterpillarsDied++;
     }
 }
