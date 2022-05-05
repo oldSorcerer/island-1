@@ -20,7 +20,7 @@ public class Island {
     public final int height = 20;
     private final int ANIMAL_STEP_PERIOD = 500;
     private final int PLANT_STEP_PERIOD = ANIMAL_STEP_PERIOD * 5;
-    private final int maxCellPlants = 200;
+    private final int maxCellPlants = 100;
     public final Cell[][] cells = new Cell[height][width];
 
     public Island() {
@@ -58,25 +58,25 @@ public class Island {
                 }
 
                 random = ThreadLocalRandom.current().nextInt(100);
-                if (random < 1) {
-                    cells[y][x].animals.add(new Wolf());
-                    cells[y][x].animals.add(new Wolf());
-                }
-
-                random = ThreadLocalRandom.current().nextInt(100);
                 if (random < 2) {
+                    cells[y][x].animals.add(new Wolf());
+                    cells[y][x].animals.add(new Wolf());
+                }
+
+                random = ThreadLocalRandom.current().nextInt(100);
+                if (random < 4) {
                     cells[y][x].animals.add(new Fox());
                     cells[y][x].animals.add(new Fox());
                 }
 
                 random = ThreadLocalRandom.current().nextInt(100);
-                if (random < 20) {
+                if (random < 15) {
                     cells[y][x].animals.add(new Rabbit());
                     cells[y][x].animals.add(new Rabbit());
                 }
 
                 random = ThreadLocalRandom.current().nextInt(100);
-                if (random < 60) {
+                if (random < 30) {
                     cells[y][x].animals.add(new Rat());
                     cells[y][x].animals.add(new Rat());
                 }

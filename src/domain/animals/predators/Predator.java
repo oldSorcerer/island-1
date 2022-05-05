@@ -18,6 +18,7 @@ public abstract class Predator extends Animal {
     @Override
     public void hunt(Cell cell) {
         if (saturation >= maxSaturation) {
+            decreaseSaturation(cell);
             return;
         }
 

@@ -4,6 +4,8 @@ import domain.animals.Animal;
 import domain.plants.Plant;
 import domain.terrain.Cell;
 
+import static domain.Params.plantWeight;
+
 public abstract class Herbivore extends Animal {
 
     @Override
@@ -11,7 +13,7 @@ public abstract class Herbivore extends Animal {
         if (!cell.plants.isEmpty()) {
             cell.plants.remove(cell.plants.iterator().next());
             Plant.plantsEaten++;
-            increaseSaturation(1);
+            increaseSaturation(plantWeight);
         } else {
             decreaseSaturation(cell);
         }

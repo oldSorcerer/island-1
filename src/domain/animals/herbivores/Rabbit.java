@@ -12,6 +12,7 @@ public class Rabbit extends Herbivore {
     public Rabbit() {
         rabbitsBorn++;
         this.weight = rabbitWeight;
+        this.maxInCell = rabbitsInCell;
         init();
     }
 

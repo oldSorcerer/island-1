@@ -12,6 +12,7 @@ public class Wolf extends Predator {
     public Wolf() {
         wolvesBorn++;
         this.weight = wolfWeight;
+        this.maxInCell = wolvesInCell;
         init();
         this.diet = wolfDiet;
     }

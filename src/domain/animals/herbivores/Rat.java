@@ -12,6 +12,7 @@ public class Rat extends Herbivore {
     public Rat() {
         ratsBorn++;
         this.weight = ratWeight;
+        this.maxInCell = ratsInCell;
         init();
     }
 

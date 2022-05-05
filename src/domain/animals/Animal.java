@@ -6,14 +6,16 @@ import domain.terrain.Direction;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public abstract class Animal {
 
     private boolean dead;
     protected int maxSaturation;
-    protected int saturation;
+    protected double saturation;
     private boolean reproduced;
     protected int weight;
+    protected int maxInCell;
 
     protected void init() {
         maxSaturation = weight * 2;
@@ -40,7 +42,8 @@ public abstract class Animal {
         if (dead) {
             return;
         }
-        saturation--;
+//        saturation--;
+        saturation = saturation - (0.05 * maxSaturation);
         if (saturation <= 0) {
             die();
             cell.animals.remove(this);
@@ -52,6 +55,7 @@ public abstract class Animal {
             return;
         }
         saturation = Math.min(saturation + points, maxSaturation);
+        reproduced = false;
     }
 
     public void feed(Cell cell) {
@@ -83,18 +87,20 @@ public abstract class Animal {
     }
 
     public Set<Animal> reproduce(Cell cell) {
-        if (!isReadyToReproduce()) {
-            return Collections.emptySet();
-        }
-        setReproduced(true);
-
-        int random = ThreadLocalRandom.current().nextInt(100);
-        if (random < getWeight()) {
+        if (!isReadyToReproduce() || ThreadLocalRandom.current().nextBoolean()) {
             return Collections.emptySet();
         }
 
-        for (Animal otherAnimal : cell.animals) {
-            if (!otherAnimal.isReadyToReproduce() || !this.getClass().equals(otherAnimal.getClass())) {
+        Set<Animal> candidates = cell.animals.stream()
+                .filter(animal -> animal.getClass().equals(getClass()))
+                .collect(Collectors.toSet());
+
+        if (candidates.size() >= maxInCell) {
+            return Collections.emptySet();
+        }
+
+        for (Animal otherAnimal : candidates) {
+            if (!otherAnimal.isReadyToReproduce()) {
                 continue;
             }
             otherAnimal.setReproduced(true);
