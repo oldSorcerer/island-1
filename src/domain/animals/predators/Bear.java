@@ -3,6 +3,7 @@ package domain.animals.predators;
 import domain.animals.Animal;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static domain.Params.*;

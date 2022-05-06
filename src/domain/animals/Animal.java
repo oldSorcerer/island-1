@@ -4,6 +4,7 @@ import domain.terrain.Cell;
 import domain.terrain.Direction;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ public abstract class Animal {
     private boolean reproduced;
     protected double weight;
     protected int maxInCell;
+    protected Map<Class, Integer> diet;
 
     protected void init() {
         maxSaturation = weight * 2;

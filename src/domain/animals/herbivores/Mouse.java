@@ -1,16 +1,36 @@
-package domain.animals.predators;
+package domain.animals.herbivores;
 
 import domain.animals.Animal;
 import domain.terrain.Cell;
 
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Predator extends Animal {
+import static domain.Params.*;
+
+public class Mouse extends Herbivore {
+
+    public Mouse() {
+        miceBorn++;
+        this.weight = mouseWeight;
+        this.maxInCell = miceInCell;
+        init();
+        this.diet = mouseDiet;
+    }
 
     @Override
-    protected void pinchGrass(Cell cell) {
+    protected Set<Animal> getOffspring() {
+        return new HashSet<>() {{
+            add(new Mouse());
+        }};
+    }
+
+    @Override
+    public void die() {
+        super.die();
+        miceDied++;
     }
 
     @Override
