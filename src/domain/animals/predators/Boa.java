@@ -13,6 +13,7 @@ public class Boa extends Predator {
         boasBorn++;
         this.weight = boaWeight;
         this.maxInCell = boasInCell;
+        this.maxDistance = boaMaxDistance;
         init();
         this.diet = boaDiet;
     }

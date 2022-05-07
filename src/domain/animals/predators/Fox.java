@@ -13,6 +13,7 @@ public class Fox extends Predator {
         foxesBorn++;
         this.weight = foxWeight;
         this.maxInCell = foxesInCell;
+        this.maxDistance = foxMaxDistance;
         init();
         this.diet = foxDiet;
     }

@@ -16,6 +16,7 @@ public class Duck extends Herbivore {
         ducksBorn++;
         this.weight = duckWeight;
         this.maxInCell = ducksInCell;
+        this.maxDistance = duckMaxDistance;
         init();
         this.diet = duckDiet;
     }

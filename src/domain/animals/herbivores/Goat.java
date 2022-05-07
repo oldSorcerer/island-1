@@ -13,6 +13,7 @@ public class Goat extends Herbivore {
         goatsBorn++;
         this.weight = goatWeight;
         this.maxInCell = goatsInCell;
+        this.maxDistance = goatMaxDistance;
         init();
     }
 

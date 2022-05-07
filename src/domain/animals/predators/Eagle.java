@@ -13,6 +13,7 @@ public class Eagle extends Predator {
         eaglesBorn++;
         this.weight = eagleWeight;
         this.maxInCell = eaglesInCell;
+        this.maxDistance = eagleMaxDistance;
         init();
         this.diet = eagleDiet;
     }

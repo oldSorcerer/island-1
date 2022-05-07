@@ -13,12 +13,14 @@ public class Rabbit extends Herbivore {
         rabbitsBorn++;
         this.weight = rabbitWeight;
         this.maxInCell = rabbitsInCell;
+        this.maxDistance = rabbitMaxDistance;
         init();
     }
 
     @Override
     protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
+            add(new Rabbit());
             add(new Rabbit());
         }};
     }

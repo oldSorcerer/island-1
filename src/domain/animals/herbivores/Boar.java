@@ -10,28 +10,28 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static domain.Params.*;
 
-public class Mouse extends Herbivore {
+public class Boar extends Herbivore {
 
-    public Mouse() {
-        miceBorn++;
-        this.weight = mouseWeight;
-        this.maxInCell = miceInCell;
-        this.maxDistance = mouseMaxDistance;
+    public Boar() {
+        boarsBorn++;
+        this.weight = boarWeight;
+        this.maxInCell = boarsInCell;
+        this.maxDistance = boarMaxDistance;
         init();
-        this.diet = mouseDiet;
+        this.diet = boarDiet;
     }
 
     @Override
     protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
-            add(new Mouse());
+            add(new Boar());
         }};
     }
 
     @Override
     public void die() {
         super.die();
-        miceDied++;
+        boarsDied++;
     }
 
     @Override

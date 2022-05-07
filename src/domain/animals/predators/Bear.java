@@ -14,6 +14,7 @@ public class Bear extends Predator {
         bearsBorn++;
         this.weight = bearWeight;
         this.maxInCell = bearsInCell;
+        this.maxDistance = bearMaxDistance;
         init();
         this.diet = bearDiet;
     }

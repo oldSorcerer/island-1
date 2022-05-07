@@ -3,9 +3,7 @@ package domain.animals;
 import domain.terrain.Cell;
 import domain.terrain.Direction;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -17,11 +15,12 @@ public abstract class Animal {
     private boolean reproduced;
     protected double weight;
     protected int maxInCell;
+    protected int maxDistance;
     protected Map<Class, Integer> diet;
 
     protected void init() {
-        maxSaturation = weight * 2;
-        saturation = weight;
+        maxSaturation = weight * 2 + 1;
+        saturation = weight + 1;
     }
 
     public double getWeight() {
@@ -69,23 +68,28 @@ public abstract class Animal {
 
     protected abstract void hunt(Cell cell);
 
-    public Direction getDirection() {
+    public List<Direction> getDirection() {
         if (dead) {
-            return Direction.NONE;
+            return Collections.emptyList();
         }
 
-        int random = ThreadLocalRandom.current().nextInt(100);
-        if (random < 10) {
-            return Direction.LEFT;
-        } else if (random < 20) {
-            return Direction.RIGHT;
-        } else if (random < 30) {
-            return Direction.UP;
-        } else if (random < 40) {
-            return Direction.DOWN;
-        } else {
-            return Direction.NONE;
+        List<Direction> result = new ArrayList<>();
+        for (int i = 0; i < maxDistance; i++) {
+            int random = ThreadLocalRandom.current().nextInt(100);
+            if (random < 10) {
+                result.add(Direction.LEFT);
+            } else if (random < 20) {
+                result.add(Direction.RIGHT);
+            } else if (random < 30) {
+                result.add(Direction.UP);
+            } else if (random < 40) {
+                result.add(Direction.DOWN);
+            } else {
+                result.add(Direction.NONE);
+            }
         }
+
+        return result;
     }
 
     public Set<Animal> reproduce(Cell cell) {

@@ -13,6 +13,7 @@ public class Buffalo extends Herbivore {
         buffaloesBorn++;
         this.weight = buffaloWeight;
         this.maxInCell = buffaloesInCell;
+        this.maxDistance = buffaloMaxDistance;
         init();
     }
 

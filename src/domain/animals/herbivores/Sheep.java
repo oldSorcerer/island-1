@@ -13,6 +13,7 @@ public class Sheep extends Herbivore {
         sheepsBorn++;
         this.weight = sheepWeight;
         this.maxInCell = sheepsInCell;
+        this.maxDistance = sheepMaxDistance;
         init();
     }
 

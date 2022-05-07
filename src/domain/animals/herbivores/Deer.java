@@ -13,6 +13,7 @@ public class Deer extends Herbivore {
         deerBorn++;
         this.weight = deerWeight;
         this.maxInCell = deerInCell;
+        this.maxDistance = deerMaxDistance;
         init();
     }
 

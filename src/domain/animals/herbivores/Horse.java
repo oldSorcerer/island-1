@@ -13,6 +13,7 @@ public class Horse extends Herbivore {
         horsesBorn++;
         this.weight = horseWeight;
         this.maxInCell = horsesInCell;
+        this.maxDistance = horseMaxDistance;
         init();
     }
 

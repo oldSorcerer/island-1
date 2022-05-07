@@ -23,18 +23,25 @@ public class Cell {
         this.y = y;
     }
 
-    private Cell getNextCell(Direction direction) {
-        if (direction == Direction.LEFT && x > 0) {
-            return island.cells[y][x - 1];
-        } else if (direction == Direction.RIGHT && x < island.width - 1) {
-            return island.cells[y][x + 1];
-        } else if (direction == Direction.UP && y > 0) {
-            return island.cells[y - 1][x];
-        } else if (direction == Direction.DOWN && y < island.height - 1) {
-            return island.cells[y + 1][x];
-        } else {
-            return null;
+    private Cell getDestinationCell(Cell start, List<Direction> directions) {
+        Cell destination;
+        for (Direction direction : directions) {
+            if (direction == Direction.LEFT && start.x > 0) {
+                destination = island.cells[start.y][start.x - 1];
+            } else if (direction == Direction.RIGHT && start.x < island.width - 1) {
+                destination = island.cells[start.y][start.x + 1];
+            } else if (direction == Direction.UP && start.y > 0) {
+                destination = island.cells[start.y - 1][start.x];
+            } else if (direction == Direction.DOWN && start.y < island.height - 1) {
+                destination = island.cells[start.y + 1][start.x];
+            } else {
+                continue;
+            }
+
+            start = destination;
         }
+
+        return start;
     }
 
     public class CellLifeCycle implements Callable<Map<Cell, Set<Animal>>> {
@@ -50,9 +57,9 @@ public class Cell {
                 Set<Animal> reproduced = animal.reproduce(Cell.this);
                 newLivestock.addAll(reproduced);
 
-                Direction direction = animal.getDirection();
-                Cell nextCell = getNextCell(direction);
-                if (nonNull(nextCell)) {
+                List<Direction> directions = animal.getDirection();
+                Cell nextCell = getDestinationCell(Cell.this, directions);
+                if (nextCell != Cell.this) {
                     forResettlement.computeIfAbsent(nextCell, (v) -> new HashSet<>()).add(animal);
                     animals.remove(animal);
                 }

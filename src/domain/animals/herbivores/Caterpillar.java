@@ -1,6 +1,7 @@
 package domain.animals.herbivores;
 
 import domain.animals.Animal;
+import domain.terrain.Cell;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +14,7 @@ public class Caterpillar extends Herbivore {
         caterpillarsBorn++;
         this.weight = caterpillarWeight;
         this.maxInCell = caterpillarsInCell;
+        this.maxDistance = caterpillarMaxDistance;
         init();
     }
 
@@ -27,5 +29,14 @@ public class Caterpillar extends Herbivore {
     public void die() {
         super.die();
         caterpillarsDied++;
+    }
+
+    @Override
+    public void pinchGrass(Cell cell) {
+        if (!cell.plants.isEmpty()) {
+            increaseSaturation(plantWeight);
+        } else {
+            decreaseSaturation(cell);
+        }
     }
 }
