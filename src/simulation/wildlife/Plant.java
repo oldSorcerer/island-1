@@ -1,6 +1,6 @@
-package domain.plants;
+package simulation.wildlife;
 
-import static domain.Params.PLANT_WEIGHT;
+import static simulation.Params.PLANT_WEIGHT;
 
 public class Plant {
     public static int plantsGrown;

@@ -1,9 +1,9 @@
-package domain.terrain;
+package simulation.terrain;
 
-import domain.animals.Animal;
-import domain.animals.herbivores.*;
-import domain.animals.predators.*;
-import domain.plants.Plant;
+import simulation.wildlife.Animal;
+import simulation.wildlife.herbivores.*;
+import simulation.wildlife.predators.*;
+import simulation.wildlife.Plant;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
-import static domain.Params.*;
+import static simulation.Params.*;
 
 public class Island {
 

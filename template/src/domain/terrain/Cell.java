@@ -1,6 +1,6 @@
-package domain.terrain;
+package simulation.terrain;
 
-import domain.plants.Plant;
+import simulation.plants.Plant;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;

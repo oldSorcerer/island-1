@@ -1,37 +1,37 @@
-package domain.animals.herbivores;
+package simulation.wildlife.herbivores;
 
-import domain.animals.Animal;
-import domain.terrain.Cell;
+import simulation.wildlife.Animal;
+import simulation.terrain.Cell;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static domain.Params.*;
+import static simulation.Params.*;
 
-public class Mouse extends Herbivore {
+public class Duck extends Herbivore {
 
-    public Mouse() {
-        miceBorn++;
-        this.weight = mouseWeight;
-        this.maxInCell = miceInCell;
-        this.maxDistance = mouseMaxDistance;
+    public Duck() {
+        ducksBorn++;
+        this.weight = duckWeight;
+        this.maxInCell = ducksInCell;
+        this.maxDistance = duckMaxDistance;
         init();
-        this.diet = mouseDiet;
+        this.diet = duckDiet;
     }
 
     @Override
     protected Set<Animal> getOffspring() {
         return new HashSet<>() {{
-            add(new Mouse());
+            add(new Duck());
         }};
     }
 
     @Override
     public void die() {
         super.die();
-        miceDied++;
+        ducksDied++;
     }
 
     @Override

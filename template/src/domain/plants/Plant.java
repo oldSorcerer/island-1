@@ -1,6 +1,6 @@
-package domain.plants;
+package simulation.plants;
 
-import domain.terrain.Island;
+import simulation.terrain.Island;
 
 public class Plant {
     public static int plantsGrown;

@@ -1,8 +1,8 @@
-package domain;
+package simulation;
 
-import domain.animals.herbivores.*;
-import domain.animals.predators.Boa;
-import domain.animals.predators.Fox;
+import simulation.wildlife.herbivores.*;
+import simulation.wildlife.predators.Boa;
+import simulation.wildlife.predators.Fox;
 
 import java.util.Map;
 

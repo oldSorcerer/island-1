@@ -1,7 +1,7 @@
-package domain.animals;
+package simulation.wildlife;
 
-import domain.terrain.Cell;
-import domain.terrain.Direction;
+import simulation.terrain.Cell;
+import simulation.terrain.Direction;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;

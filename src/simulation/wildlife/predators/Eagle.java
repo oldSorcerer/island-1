@@ -1,11 +1,11 @@
-package domain.animals.predators;
+package simulation.wildlife.predators;
 
-import domain.animals.Animal;
+import simulation.wildlife.Animal;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static domain.Params.*;
+import static simulation.Params.*;
 
 public class Eagle extends Predator {
 

@@ -1,15 +1,15 @@
-package domain.terrain;
+package simulation.terrain;
 
-import domain.animals.Animal;
-import domain.plants.Plant;
+import simulation.wildlife.Animal;
+import simulation.wildlife.Plant;
 
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static domain.Params.HEIGHT;
-import static domain.Params.WIDTH;
+import static simulation.Params.HEIGHT;
+import static simulation.Params.WIDTH;
 
 public class Cell {
     public final Island island;

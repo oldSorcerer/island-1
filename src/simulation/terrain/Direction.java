@@ -1,4 +1,4 @@
-package domain.terrain;
+package simulation.terrain;
 
 public enum Direction {
     LEFT,

@@ -1,4 +1,4 @@
-import domain.terrain.Island;
+import simulation.terrain.Island;
 
 public class Solution {
 

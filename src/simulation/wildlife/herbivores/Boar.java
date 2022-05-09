@@ -1,15 +1,37 @@
-package domain.animals.predators;
+package simulation.wildlife.herbivores;
 
-import domain.animals.Animal;
-import domain.terrain.Cell;
+import simulation.wildlife.Animal;
+import simulation.terrain.Cell;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Predator extends Animal {
+import static simulation.Params.*;
+
+public class Boar extends Herbivore {
+
+    public Boar() {
+        boarsBorn++;
+        this.weight = boarWeight;
+        this.maxInCell = boarsInCell;
+        this.maxDistance = boarMaxDistance;
+        init();
+        this.diet = boarDiet;
+    }
 
     @Override
-    protected void pinchGrass(Cell cell) {
+    protected Set<Animal> getOffspring() {
+        return new HashSet<>() {{
+            add(new Boar());
+        }};
+    }
+
+    @Override
+    public void die() {
+        super.die();
+        boarsDied++;
     }
 
     @Override

@@ -1,11 +1,11 @@
-package domain.animals.herbivores;
+package simulation.wildlife.herbivores;
 
-import domain.animals.Animal;
+import simulation.wildlife.Animal;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static domain.Params.*;
+import static simulation.Params.*;
 
 public class Sheep extends Herbivore {
 

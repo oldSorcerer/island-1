@@ -1,12 +1,12 @@
-package domain.animals.herbivores;
+package simulation.wildlife.herbivores;
 
-import domain.animals.Animal;
-import domain.terrain.Cell;
+import simulation.wildlife.Animal;
+import simulation.terrain.Cell;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static domain.Params.*;
+import static simulation.Params.*;
 
 public class Caterpillar extends Herbivore {
 

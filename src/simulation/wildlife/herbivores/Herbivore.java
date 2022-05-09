@@ -1,10 +1,10 @@
-package domain.animals.herbivores;
+package simulation.wildlife.herbivores;
 
-import domain.animals.Animal;
-import domain.plants.Plant;
-import domain.terrain.Cell;
+import simulation.wildlife.Animal;
+import simulation.wildlife.Plant;
+import simulation.terrain.Cell;
 
-import static domain.Params.PLANT_WEIGHT;
+import static simulation.Params.PLANT_WEIGHT;
 
 public abstract class Herbivore extends Animal {
 
