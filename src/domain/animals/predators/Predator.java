@@ -3,7 +3,6 @@ package domain.animals.predators;
 import domain.animals.Animal;
 import domain.terrain.Cell;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 

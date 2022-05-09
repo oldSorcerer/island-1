@@ -34,7 +34,7 @@ public class Caterpillar extends Herbivore {
     @Override
     public void pinchGrass(Cell cell) {
         if (!cell.plants.isEmpty()) {
-            increaseSaturation(plantWeight);
+            increaseSaturation(PLANT_WEIGHT);
         } else {
             decreaseSaturation(cell);
         }

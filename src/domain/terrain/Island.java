@@ -14,12 +14,8 @@ import java.util.stream.Collectors;
 import static domain.Params.*;
 
 public class Island {
-    public final int width = 100;
-    public final int height = 20;
-    private final int ANIMAL_STEP_PERIOD = 500;
-    private final int PLANT_STEP_PERIOD = ANIMAL_STEP_PERIOD * 2;
-    private final int maxCellPlants = 300;
-    public final Cell[][] cells = new Cell[height][width];
+
+    public final Cell[][] cells = new Cell[HEIGHT][WIDTH];
 
     public Island() {
         initCells();
@@ -28,17 +24,17 @@ public class Island {
     }
 
     private void initCells() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 cells[y][x] = new Cell(this, x, y);
             }
         }
     }
 
     private void growPlants() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int random = ThreadLocalRandom.current().nextInt(maxCellPlants / 10, maxCellPlants / 2);
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                int random = ThreadLocalRandom.current().nextInt(MAX_CELL_PLANTS / 10, MAX_CELL_PLANTS / 2);
                 for (int i = 0; i < random; i++) {
                     cells[y][x].plants.add(new Plant());
                 }
@@ -50,8 +46,8 @@ public class Island {
         int totalCellAmount = wolvesInCell + boasInCell + foxesInCell + bearsInCell + eaglesInCell + horsesInCell
                 + deerInCell + rabbitsInCell + miceInCell + goatsInCell + sheepsInCell + boarsInCell
                 + buffaloesInCell + ducksInCell + caterpillarsInCell;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 if (getRandom(wolvesInCell, totalCellAmount)) {
                     cells[y][x].animals.add(new Wolf());
                     cells[y][x].animals.add(new Wolf());
@@ -130,12 +126,12 @@ public class Island {
         @Override
         public void run() {
             try {
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
+                for (int y = 0; y < HEIGHT; y++) {
+                    for (int x = 0; x < WIDTH; x++) {
                         if (ThreadLocalRandom.current().nextBoolean()) {
                             continue;
                         }
-                        int factor = maxCellPlants / 2 - Math.abs(cells[y][x].plants.size() - maxCellPlants / 2) + 2;
+                        int factor = MAX_CELL_PLANTS / 2 - Math.abs(cells[y][x].plants.size() - MAX_CELL_PLANTS / 2) + 2;
                         int numberOfNewPlants = factor > 0 ? ThreadLocalRandom.current().nextInt(factor) : 10;
 
                         for (int i = 0; i < numberOfNewPlants; i++) {
@@ -163,8 +159,8 @@ public class Island {
         private void nextLifeCycle() {
             ExecutorService service = Executors.newCachedThreadPool();
             Set<Future<Map<Cell, Set<Animal>>>> resettlementGroups = new HashSet<>();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (int x = 0; x < WIDTH; x++) {
                     resettlementGroups.add(service.submit(cells[y][x].new CellLifeCycle()));
                 }
             }
@@ -199,8 +195,8 @@ public class Island {
                     goatsBorn, goatsDied, sheepsBorn, sheepsDied, boarsBorn, boarsDied,
                     buffaloesBorn, buffaloesDied, ducksBorn, ducksDied, caterpillarsBorn, caterpillarsDied);
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (int x = 0; x < WIDTH; x++) {
                     Cell cell = cells[y][x];
                     if (cell.animals.isEmpty()) {
                         if (cell.plants.isEmpty()) {
