@@ -18,9 +18,14 @@ public abstract class Animal {
     protected int maxDistance;
     protected Map<Class, Integer> diet;
 
-    protected void init() {
-        maxSaturation = weight * 2 + 1;
-        saturation = weight + 1;
+    public Animal(double weight, int maxInCell, int maxDistance, Map<Class, Integer> diet) {
+        this.weight = weight;
+        this.maxInCell = maxInCell;
+        this.maxDistance = maxDistance;
+        this.diet = diet;
+
+        this.maxSaturation = this.weight * 2 + 1;
+        this.saturation = this.weight + 1;
     }
 
     public double getWeight() {
@@ -43,7 +48,7 @@ public abstract class Animal {
         if (dead) {
             return;
         }
-//        saturation--;
+
         saturation = saturation - (0.05 * maxSaturation);
         if (saturation <= 0) {
             die();

@@ -10,11 +10,8 @@ import static simulation.Params.*;
 public class Deer extends Herbivore {
 
     public Deer() {
+        super(deerWeight, deerInCell, deerMaxDistance, null);
         deerBorn++;
-        this.weight = deerWeight;
-        this.maxInCell = deerInCell;
-        this.maxDistance = deerMaxDistance;
-        init();
     }
 
     @Override

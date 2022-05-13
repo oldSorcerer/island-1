@@ -1,12 +1,18 @@
 package simulation.wildlife.herbivores;
 
+import simulation.terrain.Cell;
 import simulation.wildlife.Animal;
 import simulation.wildlife.Plant;
-import simulation.terrain.Cell;
+
+import java.util.Map;
 
 import static simulation.Params.PLANT_WEIGHT;
 
 public abstract class Herbivore extends Animal {
+
+    public Herbivore(double weight, int maxInCell, int maxDistance, Map<Class, Integer> diet) {
+        super(weight, maxInCell, maxDistance, diet);
+    }
 
     @Override
     public void pinchGrass(Cell cell) {

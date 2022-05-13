@@ -10,12 +10,8 @@ import static simulation.Params.*;
 public class Eagle extends Predator {
 
     public Eagle() {
+        super(eagleWeight, eaglesInCell, eagleMaxDistance, eagleDiet);
         eaglesBorn++;
-        this.weight = eagleWeight;
-        this.maxInCell = eaglesInCell;
-        this.maxDistance = eagleMaxDistance;
-        init();
-        this.diet = eagleDiet;
     }
 
     @Override

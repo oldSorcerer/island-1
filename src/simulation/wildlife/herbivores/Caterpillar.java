@@ -1,7 +1,7 @@
 package simulation.wildlife.herbivores;
 
-import simulation.wildlife.Animal;
 import simulation.terrain.Cell;
+import simulation.wildlife.Animal;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,11 +11,8 @@ import static simulation.Params.*;
 public class Caterpillar extends Herbivore {
 
     public Caterpillar() {
+        super(caterpillarWeight, caterpillarsInCell, caterpillarMaxDistance, null);
         caterpillarsBorn++;
-        this.weight = caterpillarWeight;
-        this.maxInCell = caterpillarsInCell;
-        this.maxDistance = caterpillarMaxDistance;
-        init();
     }
 
     @Override

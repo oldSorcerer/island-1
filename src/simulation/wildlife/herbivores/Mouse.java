@@ -1,7 +1,7 @@
 package simulation.wildlife.herbivores;
 
-import simulation.wildlife.Animal;
 import simulation.terrain.Cell;
+import simulation.wildlife.Animal;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,12 +13,8 @@ import static simulation.Params.*;
 public class Mouse extends Herbivore {
 
     public Mouse() {
+        super(mouseWeight, miceInCell, mouseMaxDistance, mouseDiet);
         miceBorn++;
-        this.weight = mouseWeight;
-        this.maxInCell = miceInCell;
-        this.maxDistance = mouseMaxDistance;
-        init();
-        this.diet = mouseDiet;
     }
 
     @Override

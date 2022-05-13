@@ -1,7 +1,7 @@
 package simulation.wildlife.herbivores;
 
-import simulation.wildlife.Animal;
 import simulation.terrain.Cell;
+import simulation.wildlife.Animal;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,12 +13,8 @@ import static simulation.Params.*;
 public class Boar extends Herbivore {
 
     public Boar() {
+        super(boarWeight, boarsInCell, boarMaxDistance, boarDiet);
         boarsBorn++;
-        this.weight = boarWeight;
-        this.maxInCell = boarsInCell;
-        this.maxDistance = boarMaxDistance;
-        init();
-        this.diet = boarDiet;
     }
 
     @Override

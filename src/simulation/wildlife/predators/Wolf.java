@@ -10,12 +10,8 @@ import static simulation.Params.*;
 public class Wolf extends Predator {
 
     public Wolf() {
+        super(wolfWeight, wolvesInCell, wolfMaxDistance, wolfDiet);
         wolvesBorn++;
-        this.weight = wolfWeight;
-        this.maxInCell = wolvesInCell;
-        this.maxDistance = wolfMaxDistance;
-        init();
-        this.diet = wolfDiet;
     }
 
     @Override

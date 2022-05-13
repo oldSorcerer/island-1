@@ -10,11 +10,8 @@ import static simulation.Params.*;
 public class Buffalo extends Herbivore {
 
     public Buffalo() {
+        super(buffaloWeight, buffaloesInCell, buffaloMaxDistance, null);
         buffaloesBorn++;
-        this.weight = buffaloWeight;
-        this.maxInCell = buffaloesInCell;
-        this.maxDistance = buffaloMaxDistance;
-        init();
     }
 
     @Override

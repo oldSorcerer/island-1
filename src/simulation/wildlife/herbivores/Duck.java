@@ -13,12 +13,8 @@ import static simulation.Params.*;
 public class Duck extends Herbivore {
 
     public Duck() {
+        super(duckWeight, ducksInCell, duckMaxDistance, duckDiet);
         ducksBorn++;
-        this.weight = duckWeight;
-        this.maxInCell = ducksInCell;
-        this.maxDistance = duckMaxDistance;
-        init();
-        this.diet = duckDiet;
     }
 
     @Override

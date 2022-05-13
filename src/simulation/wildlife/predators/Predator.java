@@ -3,10 +3,15 @@ package simulation.wildlife.predators;
 import simulation.wildlife.Animal;
 import simulation.terrain.Cell;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Predator extends Animal {
+
+    public Predator(double weight, int maxInCell, int maxDistance, Map<Class, Integer> diet) {
+        super(weight, maxInCell, maxDistance, diet);
+    }
 
     @Override
     protected void pinchGrass(Cell cell) {

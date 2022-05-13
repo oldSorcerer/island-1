@@ -10,12 +10,8 @@ import static simulation.Params.*;
 public class Bear extends Predator {
 
     public Bear() {
+        super(bearWeight, bearsInCell, bearMaxDistance, bearDiet);
         bearsBorn++;
-        this.weight = bearWeight;
-        this.maxInCell = bearsInCell;
-        this.maxDistance = bearMaxDistance;
-        init();
-        this.diet = bearDiet;
     }
 
     @Override

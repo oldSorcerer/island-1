@@ -10,12 +10,8 @@ import static simulation.Params.*;
 public class Boa extends Predator {
 
     public Boa() {
+        super(boaWeight, boasInCell, boaMaxDistance, boaDiet);
         boasBorn++;
-        this.weight = boaWeight;
-        this.maxInCell = boasInCell;
-        this.maxDistance = boaMaxDistance;
-        init();
-        this.diet = boaDiet;
     }
 
     @Override

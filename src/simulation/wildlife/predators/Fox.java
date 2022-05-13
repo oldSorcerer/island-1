@@ -10,12 +10,8 @@ import static simulation.Params.*;
 public class Fox extends Predator {
 
     public Fox() {
+        super(foxWeight, foxesInCell, foxMaxDistance, foxDiet);
         foxesBorn++;
-        this.weight = foxWeight;
-        this.maxInCell = foxesInCell;
-        this.maxDistance = foxMaxDistance;
-        init();
-        this.diet = foxDiet;
     }
 
     @Override
