@@ -1,11 +1,12 @@
 package simulation.terrain;
 
 import simulation.wildlife.Animal;
+import simulation.wildlife.Plant;
 import simulation.wildlife.herbivores.*;
 import simulation.wildlife.predators.*;
-import simulation.wildlife.Plant;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
@@ -15,7 +16,7 @@ import static simulation.Params.*;
 
 public class Island {
 
-    public final Cell[][] cells = new Cell[HEIGHT][WIDTH];
+    private final Cell[][] cells = new Cell[HEIGHT][WIDTH];
 
     public Island() {
         initCells();
@@ -110,6 +111,27 @@ public class Island {
                 }
             }
         }
+    }
+
+    public Cell getDestinationCell(Cell start, List<Direction> directions) {
+        Cell destination;
+        for (Direction direction : directions) {
+            if (direction == Direction.LEFT && start.x > 0) {
+                destination = cells[start.y][start.x - 1];
+            } else if (direction == Direction.RIGHT && start.x < WIDTH - 1) {
+                destination = cells[start.y][start.x + 1];
+            } else if (direction == Direction.UP && start.y > 0) {
+                destination = cells[start.y - 1][start.x];
+            } else if (direction == Direction.DOWN && start.y < HEIGHT - 1) {
+                destination = cells[start.y + 1][start.x];
+            } else {
+                continue;
+            }
+
+            start = destination;
+        }
+
+        return start;
     }
 
     private static boolean getRandom(int animalsInCell, int totalInCell) {

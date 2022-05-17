@@ -7,16 +7,18 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static simulation.Params.PLANT_WEIGHT;
+
 public abstract class Animal {
 
     private boolean dead;
-    protected double maxSaturation;
-    protected double saturation;
+    private final double maxSaturation;
+    private double saturation;
     private boolean reproduced;
-    protected double weight;
-    protected int maxInCell;
-    protected int maxDistance;
-    protected Map<Class, Integer> diet;
+    private final double weight;
+    private final int maxInCell;
+    private final int maxDistance;
+    private final Map<Class, Integer> diet;
 
     public Animal(double weight, int maxInCell, int maxDistance, Map<Class, Integer> diet) {
         this.weight = weight;
@@ -28,16 +30,8 @@ public abstract class Animal {
         this.saturation = this.weight + 1;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
-    public void die() {
+    protected void die() {
         this.dead = true;
-    }
-
-    public void setReproduced(boolean reproduced) {
-        this.reproduced = reproduced;
     }
 
     private boolean isReadyToReproduce() {
@@ -64,14 +58,52 @@ public abstract class Animal {
         reproduced = false;
     }
 
-    public void feed(Cell cell) {
-        pinchGrass(cell);
-        hunt(cell);
+    public abstract void feed(Cell cell);
+
+    protected void pinchGrass(Cell cell) {
+        if (!cell.plants.isEmpty()) {
+            cell.plants.remove(cell.plants.iterator().next());
+            Plant.plantsEaten++;
+            increaseSaturation(PLANT_WEIGHT);
+        } else {
+            decreaseSaturation(cell);
+        }
     }
 
-    protected abstract void pinchGrass(Cell cell);
+    protected void hunt(Cell cell) {
+        if (saturation >= maxSaturation) {
+            decreaseSaturation(cell);
+            return;
+        }
 
-    protected abstract void hunt(Cell cell);
+        do {
+            Optional<Animal> prey = findPray(cell);
+            if (prey.isPresent()) {
+                Animal snack = prey.get();
+                cell.animals.remove(snack);
+                snack.die();
+                increaseSaturation(snack.weight);
+                feed(cell);
+            } else {
+                break;
+            }
+        } while (saturation < maxSaturation / 2);
+
+        decreaseSaturation(cell);
+    }
+
+    private Optional<Animal> findPray(Cell cell) {
+        for (Animal candidate : cell.animals) {
+            if (diet.containsKey(candidate.getClass())) {
+                int random = ThreadLocalRandom.current().nextInt(100);
+                if (random < diet.get(candidate.getClass())) {
+                    return Optional.of(candidate);
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
 
     public List<Direction> getDirection() {
         if (dead) {
@@ -114,7 +146,7 @@ public abstract class Animal {
             if (!otherAnimal.isReadyToReproduce()) {
                 continue;
             }
-            otherAnimal.setReproduced(true);
+            otherAnimal.reproduced = true;
             return getOffspring();
         }
 
