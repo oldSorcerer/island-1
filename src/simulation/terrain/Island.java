@@ -113,6 +113,16 @@ public class Island {
         }
     }
 
+    private static boolean getRandom(int animalsInCell, int totalInCell) {
+        return ThreadLocalRandom.current().nextInt(100) < 100 * animalsInCell / totalInCell + 1;
+    }
+
+    public void run() {
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+        executorService.scheduleAtFixedRate(new PlantGrowth(), PLANT_STEP_PERIOD, PLANT_STEP_PERIOD, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(new AnimalsLifeCycle(), 0, ANIMAL_STEP_PERIOD, TimeUnit.MILLISECONDS);
+    }
+
     public Cell getDestinationCell(Cell start, List<Direction> directions) {
         Cell destination;
         for (Direction direction : directions) {
@@ -132,16 +142,6 @@ public class Island {
         }
 
         return start;
-    }
-
-    private static boolean getRandom(int animalsInCell, int totalInCell) {
-        return ThreadLocalRandom.current().nextInt(100) < 100 * animalsInCell / totalInCell + 1;
-    }
-
-    public void run() {
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
-        executorService.scheduleAtFixedRate(new PlantGrowth(), PLANT_STEP_PERIOD, PLANT_STEP_PERIOD, TimeUnit.MILLISECONDS);
-        executorService.scheduleAtFixedRate(new AnimalsLifeCycle(), 0, ANIMAL_STEP_PERIOD, TimeUnit.MILLISECONDS);
     }
 
     private class PlantGrowth implements Runnable {

@@ -9,7 +9,7 @@ import java.util.Map;
 public class Params {
     public static final int WIDTH = 100;
     public static final int HEIGHT = 20;
-    public static final int ANIMAL_STEP_PERIOD = 500;
+    public static final int ANIMAL_STEP_PERIOD = 2000;
     public static final int PLANT_STEP_PERIOD = ANIMAL_STEP_PERIOD * 5;
     public static final int MAX_CELL_PLANTS = 200;
     public static final double PLANT_WEIGHT = 1;

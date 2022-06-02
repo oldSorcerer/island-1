@@ -30,10 +30,14 @@ public class Cell {
 
             Collections.shuffle(animals, ThreadLocalRandom.current());
             for (Animal animal : animals) {
+                // едим
                 animal.feed(Cell.this);
+
+                // размножаемся
                 Set<Animal> reproduced = animal.reproduce(Cell.this);
                 newLivestock.addAll(reproduced);
 
+                // передвигаемся
                 List<Direction> directions = animal.getDirection();
                 Cell nextCell = island.getDestinationCell(Cell.this, directions);
                 if (nextCell != Cell.this) {
